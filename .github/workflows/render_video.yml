@@ -1,0 +1,91 @@
+name: Render Physics Reel
+
+on:
+  push:
+    paths:
+      - 'episodes/**/scene.py'
+      - 'src/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+    inputs:
+      episode:
+        description: 'Episode slug folder name (e.g., 001-gravity-spacetime)'
+        required: true
+        default: '001-gravity-spacetime'
+        type: string
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg libpango1.0-dev libcairo2-dev libpng-dev libjpeg-dev
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Determine Episode Slug
+      id: get-slug
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "slug=${{ github.event.inputs.episode }}" >> $GITHUB_OUTPUT
+        else
+          # Find the folder name under episodes/ that changed
+          SLUG=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '^episodes/' | head -n 1 | cut -d/ -f2)
+          if [ -z "$SLUG" ]; then
+            SLUG="001-gravity-spacetime"
+          fi
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+
+    - name: Generate Voiceover & Timings
+      run: |
+        # edge-tts is free and does not require an API key
+        python src/generate_voiceover.py --episode ${{ steps.get-slug.outputs.slug }}
+
+    - name: Render Manim Scene (LaTeX-Free Fallback)
+      run: |
+        SCENE_FILE="episodes/${{ steps.get-slug.outputs.slug }}/scene.py"
+        if [ -f "$SCENE_FILE" ]; then
+          # Extract the scene class name (e.g. GravitySpacetimeScene)
+          CLASS_NAME=$(grep -oP 'class \K\w+' "$SCENE_FILE" | head -n 1)
+          
+          # Render in high-quality (1080x1920 30fps)
+          python -m manim render -qh --format mp4 "$SCENE_FILE"
+          
+          # Move output to render cache folder
+          mkdir -p outputs/renders
+          cp "media/videos/scene/1920p30/${CLASS_NAME}.mp4" "outputs/renders/${{ steps.get-slug.outputs.slug }}-silent.mp4"
+        else
+          echo "Error: Scene file not found at $SCENE_FILE"
+          exit 1
+        fi
+      shell: bash
+
+    - name: Assemble Final Video (Video + Audio Merge)
+      run: |
+        python src/assemble_final.py --episode ${{ steps.get-slug.outputs.slug }}
+
+    - name: Upload Final Video Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.get-slug.outputs.slug }}-final-mp4
+        path: outputs/final/${{ steps.get-slug.outputs.slug }}-final.mp4
+        retention-days: 7

@@ -1,0 +1,8 @@
+google-genai
+edge-tts
+manim
+python-Levenshtein
+python-dotenv
+Pillow
+imageio
+imageio-ffmpeg

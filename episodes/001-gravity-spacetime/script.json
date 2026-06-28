@@ -1,0 +1,56 @@
+{
+  "topic": "gravity / spacetime curvature",
+  "audience_intent": "curiosity",
+  "length_variant": "60s",
+  "beats": [
+    {
+      "beat": "hook",
+      "text": "You aren't standing still right now. You're constantly falling, even on solid ground.",
+      "word_count": 12,
+      "visual_cue": "Person standing on Earth. Zoom out to show Earth orbiting Sun. Subtle distortion lines around Sun/Earth."
+    },
+    {
+      "beat": "problem",
+      "text": "We usually think gravity is a mysterious force pulling things down. But what if there's no 'pull' at all?",
+      "word_count": 21,
+      "visual_cue": "Arrow pointing down labeled 'Gravity,' then a question mark over it. An apple falling, with a 'pull' arrow that fades."
+    },
+    {
+      "beat": "explanation",
+      "text": "Massive objects, like planets or stars, don't just sit in space. They actually bend and warp the very fabric of spacetime around them. Think of it like a heavy ball placed on a stretched rubber sheet.",
+      "word_count": 48,
+      "visual_cue": "Grid representing flat spacetime. A sphere (planet/star) appears, deforming the grid into a dip. Another smaller sphere rolls near the dip."
+    },
+    {
+      "beat": "example",
+      "text": "So, Earth doesn't orbit the Sun because the Sun 'pulls' it. Instead, Earth is simply following the curves and valleys created by the Sun's immense mass in spacetime, like a marble rolling in a funnel.",
+      "word_count": 35,
+      "visual_cue": "Sun as a large dimple in the spacetime grid. Earth as a smaller sphere orbiting within the dimple, following the curve."
+    },
+    {
+      "beat": "correction",
+      "text": "So, gravity isn't a mysterious pulling force. You're just following the path of least resistance through spacetime's warped geometry. It's geometry, not a pull.",
+      "word_count": 25,
+      "visual_cue": "Animated text 'Gravity = Geometry' replacing 'Gravity = Force.' A person 'falling' along a curved path."
+    },
+    {
+      "beat": "cta",
+      "text": "Send this to someone who loves mind-bending ideas and wants to see the universe differently!",
+      "word_count": 17,
+      "visual_cue": "Text overlay: 'Mind-bending Physics' with a share icon."
+    }
+  ],
+  "source": "Carroll, Sean M. Spacetime and Geometry: An Introduction to General Relativity. Cambridge University Press, 2019.",
+  "caveat": "The 'rubber sheet' analogy simplifies spacetime curvature by representing it as a 2D spatial deformation, not fully capturing the 4D nature that includes time dilation and the full complexity of general relativity.",
+  "cta": "Send this to someone who loves mind-bending ideas and wants to see the universe differently!",
+  "cover_text": "Gravity is Spacetime",
+  "caption": "Ever wonder why things fall? It's not what you think! Discover how massive objects warp spacetime itself, guiding everything's motion without any 'pull.' This mind-bending concept from general relativity will change how you see the universe! #Physics #Spacetime #Gravity #Einstein #GeneralRelativity #ScienceFacts",
+  "hashtags": [
+    "Physics",
+    "Spacetime",
+    "Gravity",
+    "Einstein",
+    "GeneralRelativity",
+    "ScienceFacts"
+  ]
+}

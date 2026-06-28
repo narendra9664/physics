@@ -1,0 +1,110 @@
+brand:
+  name: "Physics Visual Reels"
+  positioning: "Physics concepts visually explained"
+  tone: "conversational, enthusiastic, like explaining to a curious friend"
+  avoid:
+    - hype
+    - guru language
+    - fake complexity
+    - overexplaining
+    - "In this video" openers
+    - "Today we'll learn" openers
+    - textbook tone
+
+platform:
+  primary: "instagram_reels"
+  aspect_ratio: "9:16"
+  resolution: "1080x1920"
+  target_duration_seconds: 60
+  min_duration_seconds: 30
+  max_duration_seconds: 90
+
+audience:
+  primary: "Students and curious non-experts"
+  assumed_knowledge:
+    - "basic everyday physics awareness"
+    - "no advanced math required"
+  content_goal: "build intuition first, terminology second"
+
+script:
+  max_core_ideas: 1
+  words_per_second_target: 2.4
+  default_length_variant: "60s"
+  length_variants:
+    30s:
+      total_words: "70-80"
+      beats: "hook -> problem -> explanation -> example -> cta"
+    60s:
+      total_words: "140-160"
+      beats: "hook -> problem -> explanation -> example -> correction -> cta"
+    90s:
+      total_words: "210-240"
+      beats: "hook -> importance -> explanation -> worked_example -> analogy -> correction -> cta"
+
+hook:
+  type: "visual anomaly or counterintuitive claim"
+  must_create:
+    - "visible surprise"
+    - "curiosity"
+    - "pattern interrupt in first 1.7 seconds"
+  research_note: "Visual anomaly hooks beat question hooks by ~20% in early retention"
+  banned_patterns:
+    - "In this video"
+    - "Today we'll learn"
+    - "Did you know"
+    - "You won't believe"
+    - "This will change everything"
+
+correction_beat:
+  mandatory: true
+  purpose: "Name the specific misconception being replaced"
+  research_note: "Misconception correction drives saves and shares — people forward 'wait I was wrong' content"
+  placement: "After example, before CTA"
+
+cta:
+  style: "targeted, not generic"
+  research_note: "Targeted CTAs outperform generic ones. CTA after correction beat converts 2-3x better."
+  v1_options:
+    - "Save this — next time you see X, you'll actually understand the physics."
+    - "Send this to someone who still thinks X."
+    - "Save this before you forget why X actually works."
+  banned_patterns:
+    - "Like and follow"
+    - "Like and subscribe"
+    - generic engagement requests
+
+text_on_screen:
+  subtitles: false
+  captions: false
+  formula_names: true
+  theory_names: true
+  diagram_labels: true
+  paragraph_text: false
+  max_words_per_frame: 4
+  research_note: "Text-heavy frames tank mobile watch time. Minimal text overlay — one or two key words max per frame."
+
+visuals:
+  style: "cinematic physics — dark background, bright accent objects"
+  background: "#0A0E1A"
+  semantic_colors:
+    velocity: "#5B9FFF"
+    force: "#FF6B6B"
+    energy: "#FFD166"
+    mass: "#C4C4C4"
+    gravity: "#BB86FC"
+    wavelength: "#7CFFB2"
+    time: "#60EFFF"
+  typography:
+    body_font: "Inter"
+    math_font: "LaTeX (Manim default MathTex)"
+    body_use: "theory names, brief labels only"
+    math_use: "equations and formulas only"
+  motion_discipline:
+    rule: "Every transform must map to a causal step in the explanation"
+    no_decorative_flourishes: true
+    research_note: "Cognitive-load research backs this — motion should explain, not decorate"
+  anchor:
+    type: "atom icon (nucleus + orbiting ring)"
+    purpose: "brand recognition in transitions"
+    style: "subtle, small, appears in corners or during scene changes"
+  research_note: "Animation + voiceover outperforms static diagram + text-to-speech in completion rate and comment sentiment"

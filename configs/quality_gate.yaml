@@ -1,0 +1,54 @@
+minimum_scores:
+  hook: 8
+  clarity: 8
+  accuracy: 9
+  visual_explainability: 8
+  misconception_correction: 8
+  retention: 7
+  motion_discipline: 8
+
+checks:
+  hook:
+    - "Does the first visual move within 1.7 seconds?"
+    - "Is the hook a visible anomaly or counterintuitive claim (not a question)?"
+    - "Is the hook specific to this topic, not generic?"
+  clarity:
+    - "Does the video teach one core idea only?"
+    - "Can a non-expert repeat the explanation in one sentence?"
+    - "Are technical terms earned by the explanation before being used?"
+  accuracy:
+    - "Is the core claim physically correct?"
+    - "Is the caveat field populated with where the simplification breaks down?"
+    - "Is the source a real, checkable reference?"
+    - "Are formulas, if shown, correct?"
+  visual:
+    - "Does every animation map to a causal explanation step?"
+    - "Are semantic colors used correctly (velocity=blue, force=red, etc.)?"
+    - "Is the background navy/near-black (not pure black)?"
+    - "Are formula names and theory labels the only text on screen?"
+    - "Is there enough contrast for mobile viewing?"
+  misconception_correction:
+    - "Is the correction beat present and explicit?"
+    - "Does it name the specific wrong belief being replaced?"
+    - "Does the CTA follow the correction beat?"
+  retention:
+    - "Is there a reason to keep watching after the hook?"
+    - "Does the payoff/correction land in the final third?"
+    - "Are scene changes frequent enough (every 6-10 seconds)?"
+    - "Would a viewer want to re-watch for layered visual details?"
+  motion_discipline:
+    - "Does every transform map to a narration step?"
+    - "Are there any decorative-only flourishes?"
+    - "Does the atom anchor appear in at least one transition?"
+
+blockers:
+  - "More than one core idea"
+  - "Misleading or inaccurate physics"
+  - "Any subtitles or caption text visible on screen"
+  - "No movement in first 1.7 seconds"
+  - "No clear misconception correction beat"
+  - "Generic hype hook"
+  - "No clear payoff"
+  - "Decorative animation that doesn't explain anything"
+  - "Wrong semantic color for a concept"
+  - "Generic CTA (like and follow)"

@@ -1,0 +1,80 @@
+[
+  {
+    "type": "SentenceBoundary",
+    "text": "You aren't standing still right now.",
+    "offset": 1000000,
+    "duration": 23505101
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "You're constantly falling, even on solid ground.",
+    "offset": 24005101,
+    "duration": 36249999
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "We usually think gravity is a mysterious force pulling things down.",
+    "offset": 60255100,
+    "duration": 41989795
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "But what if there's no 'pull' at all?",
+    "offset": 102244895,
+    "duration": 22729591
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "Massive objects, like planets or stars, don't just sit in space.",
+    "offset": 124974487,
+    "duration": 48622448
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "They actually bend and warp the very fabric of spacetime around them.",
+    "offset": 173596935,
+    "duration": 44540815
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "Think of it like a heavy ball placed on a stretched rubber sheet.",
+    "offset": 218137750,
+    "duration": 38163264
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "So, Earth doesn't orbit the Sun because the Sun 'pulls' it.",
+    "offset": 256301015,
+    "duration": 40714284
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "Instead, Earth is simply following the curves and valleys created by the Sun's immense mass in spacetime, like a marble rolling in a funnel.",
+    "offset": 297015300,
+    "duration": 83443875
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "So, gravity isn't a mysterious pulling force.",
+    "offset": 380459176,
+    "duration": 37397958
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "You're just following the path of least resistance through spacetime's warped geometry.",
+    "offset": 417857134,
+    "duration": 52321427
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "It's geometry, not a pull.",
+    "offset": 470178562,
+    "duration": 23112244
+  },
+  {
+    "type": "SentenceBoundary",
+    "text": "Send this to someone who loves mind-bending ideas and wants to see the universe differently!",
+    "offset": 493290806,
+    "duration": 59821427
+  }
+]

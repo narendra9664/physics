@@ -1,0 +1,50 @@
+slug: "example-topic"
+topic: "Example Physics Topic"
+category: "Physics"
+audience: "Students and curious non-experts"
+audience_intent: "curiosity"
+platform: "Instagram Reels"
+language: "English"
+length_variant: "60s"
+target_duration_seconds: 60
+status: "draft"
+
+format:
+  type: "faceless pure animation explainer"
+  visual_style: "cinematic physics — dark background, bright accent objects"
+  subtitles: false
+  captions: false
+  formula_names_allowed: true
+  theory_names_allowed: true
+  diagram_labels_allowed: true
+  voiceover: true
+
+funnel:
+  current_goal: "audience growth"
+  future_asset: "physics visual guide PDF or newsletter"
+
+script:
+  source_file: "script.json"
+  beats: []
+  source: ""
+  caveat: ""
+  cover_text: ""
+  caption: ""
+  hashtags: []
+
+assets:
+  script_json: null
+  voiceover: null
+  timing: null
+  manim_scene: null
+  silent_render: null
+  final_file: null
+
+quality_scores:
+  hook: null
+  clarity: null
+  accuracy: null
+  visual_explainability: null
+  misconception_correction: null
+  retention: null
+  motion_discipline: null

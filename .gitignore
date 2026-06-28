@@ -1,0 +1,17 @@
+# Environment
+.env
+.venv/
+.venv_manim/
+.venv_render/
+__pycache__/
+*.pyc
+
+# Media outputs
+media/
+outputs/renders/
+outputs/audio/
+outputs/final/
+
+# OS
+.DS_Store
+Thumbs.db
