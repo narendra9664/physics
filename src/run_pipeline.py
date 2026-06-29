@@ -118,7 +118,19 @@ def main():
 
     # 1. Select topic
     is_backlog = False
-    if not topic:
+    if slug and not topic:
+        # Resolve topic from existing script.json if possible
+        script_file = PROJECT_ROOT / "episodes" / slug / "script.json"
+        if script_file.exists():
+            try:
+                import json
+                script_data = json.loads(script_file.read_text(encoding="utf-8"))
+                topic = script_data.get("topic")
+            except Exception:
+                pass
+        if not topic:
+            topic = slug.replace("-", " ").title()
+    elif not topic:
         res = get_next_topic()
         if not res:
             print("No queued or backlog topics found in data/topic_backlog.csv.")

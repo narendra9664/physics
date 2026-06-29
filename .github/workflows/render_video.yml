@@ -60,14 +60,10 @@ jobs:
         elif [ "${{ github.event_name }}" = "push" ]; then
           # Push trigger: find modified episode slug folder name
           SLUG=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} 2>/dev/null | grep '^episodes/' | head -n 1 | cut -d/ -f2)
-          if [ -n "$SLUG" ] && [ "$SLUG" != "001-gravity-spacetime" ]; then
-            # If a new episode scene was pushed, render that specifically
-            # Find the topic title from its script.json or default to slug
-            TOPIC=$(python -c "import json; p='episodes/$SLUG/script.json'; print(json.load(open(p, encoding='utf-8')).get('topic', '$SLUG') if open(p).read() else '$SLUG')" 2>/dev/null || echo "$SLUG")
-            python src/run_pipeline.py --topic "$TOPIC" --slug "$SLUG"
+          if [ -n "$SLUG" ]; then
+            python src/run_pipeline.py --slug "$SLUG"
           else
-            # Default fallback push
-            python src/run_pipeline.py --topic "Gravity / spacetime curvature" --slug "001-gravity-spacetime"
+            python src/run_pipeline.py --slug "001-gravity-spacetime"
           fi
         else
           # Scheduled trigger: runs automatically on the next queued backlog topic
