@@ -6,12 +6,19 @@ on:
       - 'episodes/**/scene.py'
       - 'src/**'
       - '.github/workflows/**'
+  # Scheduled run: 3 times a day with 6-hour delays (6:00 AM, 12:00 PM, 6:00 PM UTC)
+  schedule:
+    - cron: '0 6,12,18 * * *'
+  # Manual trigger
   workflow_dispatch:
     inputs:
-      episode:
-        description: 'Episode slug folder name (e.g., 001-gravity-spacetime)'
-        required: true
-        default: '001-gravity-spacetime'
+      topic:
+        description: 'Physics Topic (e.g. Gravity / spacetime curvature)'
+        required: false
+        type: string
+      slug:
+        description: 'Episode slug folder name (optional)'
+        required: false
         type: string
 
 jobs:
@@ -40,69 +47,37 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Determine Episode Slug
-      id: get-slug
-      run: |
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          echo "slug=${{ github.event.inputs.episode }}" >> $GITHUB_OUTPUT
-        else
-          SLUG="001-gravity-spacetime"
-          BEFORE="${{ github.event.before }}"
-          AFTER="${{ github.event.after }}"
-          if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
-            DETECTED=$(git diff --name-only "$BEFORE" "$AFTER" 2>/dev/null | grep '^episodes/' | head -n 1 | cut -d/ -f2)
-            if [ -n "$DETECTED" ]; then
-              SLUG="$DETECTED"
-            fi
-          fi
-          echo "slug=$SLUG" >> $GITHUB_OUTPUT
-        fi
-      shell: bash
-
-    - name: Generate Voiceover & Timings
-      run: |
-        # edge-tts is free and does not require an API key
-        python src/generate_voiceover.py --episode ${{ steps.get-slug.outputs.slug }}
-
-    - name: Render Manim Scene (LaTeX-Free Fallback)
-      run: |
-        SCENE_FILE="episodes/${{ steps.get-slug.outputs.slug }}/scene.py"
-        if [ -f "$SCENE_FILE" ]; then
-          # Extract the scene class name (e.g. GravitySpacetimeScene)
-          CLASS_NAME=$(grep -oP 'class \K\w+' "$SCENE_FILE" | head -n 1)
-          
-          # Render in high-quality (1080x1920 30fps)
-          python -m manim render -qh --format mp4 "$SCENE_FILE"
-          
-          # Move output to render cache folder
-          mkdir -p outputs/renders
-          cp "media/videos/scene/1920p30/${CLASS_NAME}.mp4" "outputs/renders/${{ steps.get-slug.outputs.slug }}-silent.mp4"
-        else
-          echo "Error: Scene file not found at $SCENE_FILE"
-          exit 1
-        fi
-      shell: bash
-
-    - name: Assemble Final Video (Video + Audio Merge)
-      run: |
-        python src/assemble_final.py --episode ${{ steps.get-slug.outputs.slug }}
-
-    - name: Upload Video to Telegram
+    - name: Run Physics Reel Pipeline
       env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: |
-        # Only run if TELEGRAM_CHAT_ID secret is set
-        if [ -n "$TELEGRAM_CHAT_ID" ]; then
-          python src/send_telegram.py --episode ${{ steps.get-slug.outputs.slug }}
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.topic }}" ]; then
+          # Manual trigger with specific topic
+          python src/run_pipeline.py --topic "${{ github.event.inputs.topic }}" --slug "${{ github.event.inputs.slug }}"
+        elif [ "${{ github.event_name }}" = "push" ]; then
+          # Push trigger: find modified episode slug folder name
+          SLUG=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} 2>/dev/null | grep '^episodes/' | head -n 1 | cut -d/ -f2)
+          if [ -n "$SLUG" ] && [ "$SLUG" != "001-gravity-spacetime" ]; then
+            # If a new episode scene was pushed, render that specifically
+            # Find the topic title from its script.json or default to slug
+            TOPIC=$(python -c "import json; p='episodes/$SLUG/script.json'; print(json.load(open(p, encoding='utf-8')).get('topic', '$SLUG') if open(p).read() else '$SLUG')" 2>/dev/null || echo "$SLUG")
+            python src/run_pipeline.py --topic "$TOPIC" --slug "$SLUG"
+          else
+            # Default fallback push
+            python src/run_pipeline.py --topic "Gravity / spacetime curvature" --slug "001-gravity-spacetime"
+          fi
         else
-          echo "TELEGRAM_CHAT_ID is empty. Skipping upload."
+          # Scheduled trigger: runs automatically on the next queued backlog topic
+          python src/run_pipeline.py
         fi
       shell: bash
 
-    - name: Upload Final Video Artifact
+    - name: Upload Artifacts (if compiled)
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ steps.get-slug.outputs.slug }}-final-mp4
-        path: outputs/final/${{ steps.get-slug.outputs.slug }}-final.mp4
+        name: rendered-reels
+        path: outputs/final/*.mp4
+        if-no-files-found: ignore
         retention-days: 7
