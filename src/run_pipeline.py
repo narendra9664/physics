@@ -129,30 +129,38 @@ def main():
     print(f"Slug directory: episodes/{slug}")
     print("=" * 60)
 
-    # Step A: Script Generation
-    print("\n[1/4] Generating script via Gemini API...")
-    res = subprocess.run([
-        sys.executable, str(PROJECT_ROOT / "src" / "generate_script.py"),
-        "--topic", topic,
-        "--slug", slug
-    ])
-    if res.returncode != 0:
-        print("❌ Script generation failed.")
-        if is_backlog:
-            mark_topic_status(topic, "backlog")
-        sys.exit(1)
+    # Step A: Script/Voiceover Generation
+    script_file = PROJECT_ROOT / "episodes" / slug / "script.json"
+    if not script_file.exists():
+        print("\n[1/4] Generating script via Gemini API...")
+        res = subprocess.run([
+            sys.executable, str(PROJECT_ROOT / "src" / "generate_script.py"),
+            "--topic", topic,
+            "--slug", slug
+        ])
+        if res.returncode != 0:
+            print("❌ Script generation failed.")
+            if is_backlog:
+                mark_topic_status(topic, "backlog")
+            sys.exit(1)
+    else:
+        print("\n[1/4] script.json already exists. Skipping script generation.")
 
     # Step B: Voiceover Generation
-    print("\n[2/4] Generating voiceover and timing markers...")
-    res = subprocess.run([
-        sys.executable, str(PROJECT_ROOT / "src" / "generate_voiceover.py"),
-        "--episode", slug
-    ])
-    if res.returncode != 0:
-        print("❌ Voiceover generation failed.")
-        if is_backlog:
-            mark_topic_status(topic, "backlog")
-        sys.exit(1)
+    voiceover_file = PROJECT_ROOT / "episodes" / slug / "voiceover.mp3"
+    if not voiceover_file.exists():
+        print("\n[2/4] Generating voiceover and timing markers...")
+        res = subprocess.run([
+            sys.executable, str(PROJECT_ROOT / "src" / "generate_voiceover.py"),
+            "--episode", slug
+        ])
+        if res.returncode != 0:
+            print("❌ Voiceover generation failed.")
+            if is_backlog:
+                mark_topic_status(topic, "backlog")
+            sys.exit(1)
+    else:
+        print("\n[2/4] voiceover.mp3 already exists. Skipping voiceover generation.")
 
     # Step C: Manim Rendering
     scene_file = PROJECT_ROOT / "episodes" / slug / "scene.py"
