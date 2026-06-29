@@ -46,10 +46,14 @@ jobs:
         if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
           echo "slug=${{ github.event.inputs.episode }}" >> $GITHUB_OUTPUT
         else
-          # Find the folder name under episodes/ that changed
-          SLUG=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '^episodes/' | head -n 1 | cut -d/ -f2)
-          if [ -z "$SLUG" ]; then
-            SLUG="001-gravity-spacetime"
+          SLUG="001-gravity-spacetime"
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.event.after }}"
+          if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            DETECTED=$(git diff --name-only "$BEFORE" "$AFTER" 2>/dev/null | grep '^episodes/' | head -n 1 | cut -d/ -f2)
+            if [ -n "$DETECTED" ]; then
+              SLUG="$DETECTED"
+            fi
           fi
           echo "slug=$SLUG" >> $GITHUB_OUTPUT
         fi
