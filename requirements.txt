@@ -6,3 +6,4 @@ python-dotenv
 Pillow
 imageio
 imageio-ffmpeg
+requests

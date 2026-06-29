@@ -83,6 +83,19 @@ jobs:
       run: |
         python src/assemble_final.py --episode ${{ steps.get-slug.outputs.slug }}
 
+    - name: Upload Video to Telegram
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: |
+        # Only run if TELEGRAM_CHAT_ID secret is set
+        if [ -n "$TELEGRAM_CHAT_ID" ]; then
+          python src/send_telegram.py --episode ${{ steps.get-slug.outputs.slug }}
+        else
+          echo "TELEGRAM_CHAT_ID is empty. Skipping upload."
+        fi
+      shell: bash
+
     - name: Upload Final Video Artifact
       uses: actions/upload-artifact@v4
       with:
