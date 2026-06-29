@@ -107,6 +107,27 @@ def mark_topic_status(topic: str, status: str):
         writer.writerows(rows)
 
 
+def get_modified_slug() -> str | None:
+    """Find the modified episode slug from git diff."""
+    before = os.getenv("GITHUB_BEFORE_SHA")
+    after = os.getenv("GITHUB_AFTER_SHA")
+    if not before or not after:
+        return None
+    if before == "0000000000000000000000000000000000000000":
+        return None
+    try:
+        cmd = ["git", "diff", "--name-only", before, after]
+        output = subprocess.check_output(cmd, stderr=subprocess.DEVNULL).decode("utf-8")
+        for line in output.splitlines():
+            if line.startswith("episodes/"):
+                parts = line.split("/")
+                if len(parts) > 1:
+                    return parts[1]
+    except Exception:
+        pass
+    return None
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run the entire video automation pipeline.")
     parser.add_argument("--topic", type=str, help="Specific topic to override backlog")
@@ -115,6 +136,17 @@ def main():
 
     topic = args.topic
     slug = args.slug
+
+    # If both topic and slug are empty, check if we can resolve from Git Env
+    if not topic and not slug:
+        detected_slug = get_modified_slug()
+        if detected_slug:
+            slug = detected_slug
+            print(f"Detected modified episode slug from git diff: {slug}")
+        elif os.getenv("GITHUB_BEFORE_SHA"):
+            # This is a push event but no episode folder was modified, default to episode 1
+            slug = "001-gravity-spacetime"
+            print(f"No episode changes detected in push. Defaulting to: {slug}")
 
     # 1. Select topic
     is_backlog = False
