@@ -20,6 +20,10 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+# Reconfigure stdout to use UTF-8 to prevent Unicode encoding errors
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 from dotenv import load_dotenv
 load_dotenv(PROJECT_ROOT / ".env")
 
@@ -125,7 +129,7 @@ def main():
         slug = slug or slugify(topic)
 
     print("=" * 60)
-    print(f"🎬 STARTING PIPELINE: {topic}")
+    print(f"STARTING PIPELINE: {topic}")
     print(f"Slug directory: episodes/{slug}")
     print("=" * 60)
 
@@ -165,7 +169,7 @@ def main():
     # Step C: Manim Rendering
     scene_file = PROJECT_ROOT / "episodes" / slug / "scene.py"
     if not scene_file.exists():
-        print(f"\n[3/4] ⚠ Scene file 'scene.py' not found at {scene_file}")
+        print(f"\n[3/4] WARNING: Scene file 'scene.py' not found at {scene_file}")
         print("Please write your Manim code for this episode and push it to render the video.")
         print("Your script and voiceover are ready. Pausing render step.")
         sys.exit(0)
@@ -187,7 +191,7 @@ def main():
         sys.executable, "-m", "manim", "render", "-qh", "--format", "mp4", str(scene_file)
     ])
     if res.returncode != 0:
-        print("❌ Manim render failed.")
+        print("Manim render failed.")
         if is_backlog:
             mark_topic_status(topic, "backlog")
         sys.exit(1)
@@ -211,7 +215,7 @@ def main():
         "--episode", slug
     ])
     if res.returncode != 0:
-        print("❌ Final assembly failed.")
+        print("Final assembly failed.")
         if is_backlog:
             mark_topic_status(topic, "backlog")
         sys.exit(1)
@@ -229,7 +233,7 @@ def main():
     if is_backlog:
         mark_topic_status(topic, "rendered")
 
-    print("\n✅ PIPELINE RUN COMPLETED SUCCESSFULLY!")
+    print("\nPIPELINE RUN COMPLETED SUCCESSFULLY!")
 
 
 if __name__ == "__main__":
